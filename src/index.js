@@ -8,30 +8,34 @@ export default (ComposedComponent) => {
 
     constructor() {
       super();
-      this.state = {
-        width: document.body.clientWidth,
-        height: document.body.clientHeight,
-      };
+      if (typeof window !== 'undefined') {
+        this.state = {
+          width: document.body.clientWidth,
+          height: document.body.clientHeight,
+        };
+      }
     }
 
     handleResize() {
       // set initial state
-      this.setState({
-        width: document.body.clientWidth,
-        height: document.body.clientHeight,
-      });
+      if (typeof window !== 'undefined') {
+        this.setState({
+          width: document.body.clientWidth,
+          height: document.body.clientHeight,
+        });
+      }
     }
 
     componentDidMount() {
       // bind window resize listeners
       this._handleResize = this.handleResize.bind(this);
-      window.addEventListener('resize', this._handleResize);
+      typeof window !== 'undefined' && window.addEventListener('resize', this._handleResize);
       setTimeout(this._handleResize, 1000);
     }
 
     componentWillUnmount() {
       // clean up listeners
-      window.removeEventListener('resize', this._handleResize);
+      typeof window !== 'undefined' && window.removeEventListener('resize', this._handleResize);
     }
 
     getWrappedInstance() {
@@ -44,8 +48,8 @@ export default (ComposedComponent) => {
         <ComposedComponent
           {...this.props}
           ref={c => { this.wrappedInstance = c; }}
-          windowWidth={this.state.width}
-          windowHeight={this.state.height}
+          windowWidth={this.state && this.state.width}
+          windowHeight={this.state && this.state.height}
         />
       );
     }

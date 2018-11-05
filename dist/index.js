@@ -96,10 +96,12 @@
 
         var _this = _possibleConstructorReturn(this, (windowSize.__proto__ || Object.getPrototypeOf(windowSize)).call(this));
 
-        _this.state = {
-          width: document.body.clientWidth,
-          height: document.body.clientHeight
-        };
+        if (typeof window !== 'undefined') {
+          _this.state = {
+            width: document.body.clientWidth,
+            height: document.body.clientHeight
+          };
+        }
         return _this;
       }
 
@@ -107,24 +109,26 @@
         key: 'handleResize',
         value: function handleResize() {
           // set initial state
-          this.setState({
-            width: document.body.clientWidth,
-            height: document.body.clientHeight
-          });
+          if (typeof window !== 'undefined') {
+            this.setState({
+              width: document.body.clientWidth,
+              height: document.body.clientHeight
+            });
+          }
         }
       }, {
         key: 'componentDidMount',
         value: function componentDidMount() {
           // bind window resize listeners
           this._handleResize = this.handleResize.bind(this);
-          window.addEventListener('resize', this._handleResize);
+          typeof window !== 'undefined' && window.addEventListener('resize', this._handleResize);
           setTimeout(this._handleResize, 1000);
         }
       }, {
         key: 'componentWillUnmount',
         value: function componentWillUnmount() {
           // clean up listeners
-          window.removeEventListener('resize', this._handleResize);
+          typeof window !== 'undefined' && window.removeEventListener('resize', this._handleResize);
         }
       }, {
         key: 'getWrappedInstance',
@@ -141,8 +145,8 @@
             ref: function ref(c) {
               _this2.wrappedInstance = c;
             },
-            windowWidth: this.state.width,
-            windowHeight: this.state.height
+            windowWidth: this.state && this.state.width,
+            windowHeight: this.state && this.state.height
           }));
         }
       }]);
