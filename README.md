@@ -1,3 +1,7 @@
+
+# Why the fork?
+Using react-window-size directly with Gatsby will result into build errors becuase when building gatsby, window is not available in global space. This fork gracefully handles that.
+
 # React Window Size
 
 A higher-order React component that passes the browser window's dimensions as props to the wrapped component.
